@@ -1,24 +1,25 @@
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router"; 
-import { usePuterStore } from "~/lib/puter"
+import { usePuterStore } from "~/lib/puter";
 
-export const meta = ()=>([
-  { title: 'ResumAI | Auth'},
-  {name: 'description' , content: 'Log into your account'},
-])
+export const meta = () => ([
+  { title: 'ResumAI | Auth' },
+  { name: 'description', content: 'Log into your account' },
+]);
 
-const auth = () => {
-  const { isLoading , auth } = usePuterStore();
+const Auth = () => {
+  const { isLoading, auth } = usePuterStore();
   const location = useLocation();
-  const next = location.search.split('next')[1];
   const navigate = useNavigate();
 
- useEffect(() => {
-  if (auth.isAuthenticated) {
-    navigate(next || "/");
-  }
-}, [auth.isAuthenticated, next, navigate]); 
+  const searchParams = new URLSearchParams(location.search);
+  const next = searchParams.get("next") || "/";
 
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      navigate(next);
+    }
+  }, [auth.isAuthenticated, next, navigate]);
 
   return (
     <main className="bg-[url('/images/bg-main.svg')] bg-cover min-h-screen flex items-center justify-center">
@@ -31,25 +32,24 @@ const auth = () => {
           <div>
             {isLoading ? (
               <button className="auth-button animate-pulse">Signing you in...</button>
-            ) :
-            (
+            ) : (
               <>
-              {auth.isAuthenticated ? (
-                <button className = "auth-button" onClick = {auth.signOut}>
-                  <p>Log Out</p>
-                </button>
-              ):(
-                <button className = "auth-button" onClick = {auth.signIn}>
-                  <p>Log In</p>
-                </button>
-              )}
+                {auth.isAuthenticated ? (
+                  <button className="auth-button" onClick={auth.signOut}>
+                    <p>Log Out</p>
+                  </button>
+                ) : (
+                  <button className="auth-button" onClick={auth.signIn}>
+                    <p>Log In</p>
+                  </button>
+                )}
               </>
             )}
           </div>
         </section>
       </div>
     </main>
-  )
-}
+  );
+};
 
-export default auth
+export default Auth;

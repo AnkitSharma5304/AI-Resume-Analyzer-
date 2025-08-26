@@ -100,6 +100,8 @@ const getPuter = (): typeof window.puter | null =>
   typeof window !== "undefined" && window.puter ? window.puter : null;
 
 export const usePuterStore = create<PuterStore>((set, get) => {
+  
+
   const setError = (msg: string) => {
     set({
       error: msg,
@@ -114,7 +116,7 @@ export const usePuterStore = create<PuterStore>((set, get) => {
         getUser: get().auth.getUser,
       },
     });
-  };
+  }; 
 
   const checkAuthStatus = async (): Promise<boolean> => {
     const puter = getPuter();
